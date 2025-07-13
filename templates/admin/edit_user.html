@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Edit User{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Edit User: {{ user.username }}</h1>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="mb-4 p-4 rounded-md {{ 'bg-green-100 text-green-800' if category == 'success' else 'bg-red-100 text-red-800' }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <div class="bg-dark-200 p-6 rounded-lg shadow-lg max-w-md mx-auto">
+        <form method="POST" action="{{ url_for('admin.edit_user', user_id=user.id) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            
+            <div class="mb-4">
+                <label for="username" class="block text-sm font-medium mb-1">Username</label>
+                <input type="text" id="username" name="username" value="{{ user.username }}" required
+                       class="w-full px-3 py-2 bg-dark-100 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            
+            <div class="mb-4">
+                <label for="password" class="block text-sm font-medium mb-1">Password</label>
+                <input type="password" id="password" name="password" 
+                       class="w-full px-3 py-2 bg-dark-100 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <p class="mt-1 text-sm text-gray-400">Leave blank to keep current password</p>
+            </div>
+            
+            <div class="mb-6">
+                <div class="flex items-center">
+                    <input type="checkbox" id="is_admin" name="is_admin" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                           {% if user.is_admin %}checked{% endif %}>
+                    <label for="is_admin" class="ml-2 block text-sm">
+                        Admin User
+                    </label>
+                </div>
+            </div>
+            
+            <div class="flex items-center justify-between">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                    Update User
+                </button>
+                <a href="{{ url_for('admin.list_users') }}" class="text-sm text-blue-500 hover:text-blue-700">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

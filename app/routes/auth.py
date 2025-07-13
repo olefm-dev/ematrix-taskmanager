@@ -35,8 +35,8 @@ def setup():
             flash('Username already exists', 'error')
             return render_template('setup.html', now=datetime.now())
             
-        # Create the user
-        user = User(username=username)
+        # Create the user - first user is automatically an admin
+        user = User(username=username, is_admin=True)
         user.set_password(password)
         
         db.session.add(user)

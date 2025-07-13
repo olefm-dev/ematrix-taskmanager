@@ -5,3 +5,4 @@ Flask-Login
 Werkzeug
 gunicorn
 flask-talisman
+flask-wtf

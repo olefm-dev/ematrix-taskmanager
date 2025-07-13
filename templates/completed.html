@@ -24,6 +24,7 @@
                     </div>
                     <div>
                         <form action="{{ url_for('tasks.delete_task', task_id=task.id) }}" method="POST" class="inline">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <button type="submit" class="text-xs btn bg-red-600 hover:bg-red-700 text-white">Delete</button>
                         </form>
                     </div>

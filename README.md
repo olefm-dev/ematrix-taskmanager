@@ -131,8 +131,7 @@ A beautiful dark mode task manager based on the Eisenhower Matrix, built with Fl
 - **Share Links** 🔗: In Settings, create links to share publicly. Others can submit tasks, which appear in your "Requested Tasks" section for acceptance.
 - **Completed View** 🏆: Navigate to "Completed" to see archived tasks.
 - **Theme Toggle** 🌗: Switch between light/dark modes in Settings.
-
-> **Pro Tip**: For a production vibe, deploy with Gunicorn behind Caddy for automatic HTTPS!
+- **Admin Panel** 👑: Admin users can access the admin panel to manage users, create new accounts, edit user details, and delete users. The first user created during setup is automatically assigned admin privileges.
 
 ## License
 

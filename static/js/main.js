@@ -3,6 +3,11 @@
  * Main JavaScript functionality
  */
 
+// Get CSRF token from meta tag
+function getCsrfToken() {
+    return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+}
+
 // Settings Modal Functions
 function openSettingsModal() {
     document.getElementById('settingsModal').classList.remove('hidden');
@@ -126,6 +131,7 @@ function createShareLink() {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfToken()
         },
         body: JSON.stringify({ name: name })
     })
@@ -143,7 +149,10 @@ function deleteShareLink(linkId) {
     }
     
     fetch(`/share-links/${linkId}/delete`, {
-        method: 'POST'
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCsrfToken()
+        }
     })
     .then(response => response.json())
     .then(() => loadShareLinks())

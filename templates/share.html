@@ -9,6 +9,7 @@
         </div>
         
         <form action="{{ url_for('share_links.submit_shared_task', link_id=link.id) }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div class="mb-4">
                 <label for="title" class="block text-sm font-medium mb-1">Title</label>
                 <input type="text" name="title" id="title" class="input w-full" required placeholder="Task title">

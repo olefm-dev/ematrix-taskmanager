@@ -19,6 +19,7 @@
         {% endwith %}
         
         <form action="{{ url_for('auth.setup') }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div class="mb-4">
                 <label for="username" class="block text-sm font-medium mb-1">Username</label>
                 <input type="text" name="username" id="username" class="input w-full" required autofocus>

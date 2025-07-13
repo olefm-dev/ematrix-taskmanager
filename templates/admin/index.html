@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Admin Dashboard</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-dark-200 p-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-semibold mb-4">User Management</h2>
+            <p class="mb-4">Manage users of the Eisenhower Matrix Task Manager</p>
+            <a href="{{ url_for('admin.list_users') }}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded transition-colors">
+                Manage Users
+            </a>
+        </div>
+        
+        <div class="bg-dark-200 p-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-semibold mb-4">System Stats</h2>
+            <ul class="space-y-2">
+                <li>Total Users: <span class="font-semibold">{{ users|length }}</span></li>
+                <li>Admin Users: <span class="font-semibold">{{ users|selectattr('is_admin', 'eq', true)|list|length }}</span></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
