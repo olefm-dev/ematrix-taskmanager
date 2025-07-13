@@ -5,4 +5,6 @@ Flask-Login
 Werkzeug
 gunicorn
 flask-talisman
+pytest
+pytest-flask
 flask-wtf

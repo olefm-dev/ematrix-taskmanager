@@ -134,6 +134,23 @@ A beautiful dark mode task manager based on the Eisenhower Matrix, built with Fl
 - **Theme Toggle** 🌗: Switch between light/dark modes in Settings.
 - **Admin Panel** 👑: Admin users can access the admin panel to manage users, create new accounts, edit user details, and delete users. The first user created during setup is automatically assigned admin privileges.
 
+## Testing
+
+The application includes a comprehensive test suite covering authentication, task management, and admin functionality.
+
+To run the tests:
+
+```bash
+# Run the tests
+./run_tests.sh
+# Or alternatively
+pytest -v
+```
+
+The test suite includes:
+- **Unit tests**: Testing model functionality and validation
+- **Functional tests**: Testing routes, views, and form submissions
+
 ## License
 
 MIT

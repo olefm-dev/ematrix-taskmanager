@@ -25,9 +25,24 @@ class ProductionConfig(Config):
     """Production configuration"""
     DEBUG = False
 
+class TestingConfig(Config):
+    """Testing configuration"""
+    TESTING = True
+    DEBUG = True
+    # Use in-memory SQLite for tests
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    # Disable CSRF protection for testing
+    WTF_CSRF_ENABLED = False
+    # Disable security features for testing
+    SESSION_COOKIE_SECURE = False
+    REMEMBER_COOKIE_SECURE = False
+    # Make password hashing faster for tests
+    BCRYPT_LOG_ROUNDS = 4
+
 # Dictionary to easily select the config
 config = {
     'development': DevelopmentConfig,
     'production': ProductionConfig,
+    'testing': TestingConfig,
     'default': DevelopmentConfig
 }
