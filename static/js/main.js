@@ -122,7 +122,7 @@ function createShareLink() {
         return;
     }
     
-    fetch('/share-links/create', {
+    fetch('/share-links', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

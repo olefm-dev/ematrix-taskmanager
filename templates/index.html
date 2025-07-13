@@ -12,7 +12,7 @@
                 </svg>
             </button>
         </div>
-        <form action="{{ url_for('create_task') }}" method="POST">
+        <form action="{{ url_for('tasks.create_task') }}" method="POST">
             <div class="mb-4">
                 <label for="title" class="block text-sm font-medium mb-1">Title</label>
                 <input type="text" name="title" id="title" class="input w-full" required placeholder="Task title">
@@ -59,10 +59,10 @@
                     {% endif %}
                     <div class="flex mt-3 space-x-2">
                         <button onclick="openEditModal(`{{ task.id }}`, `{{ task.title }}`, `{{ task.description or '' }}`, `{{ task.quadrant }}`, `{{ task.due_date.strftime('%Y-%m-%d') if task.due_date else '' }}`)" class="text-xs btn bg-dark-100 hover:bg-dark-300 text-gray-300">Edit</button>
-                        <form action="{{ url_for('complete_task', task_id=task.id) }}" method="POST" class="inline">
+                        <form action="{{ url_for('tasks.complete_task', task_id=task.id) }}" method="POST" class="inline">
                             <button type="submit" class="text-xs btn bg-green-600 hover:bg-green-700 text-white">Complete</button>
                         </form>
-                        <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST" class="inline">
+                        <form action="{{ url_for('tasks.delete_task', task_id=task.id) }}" method="POST" class="inline">
                             <button type="submit" class="text-xs btn bg-red-600 hover:bg-red-700 text-white">Delete</button>
                         </form>
                     </div>
@@ -88,10 +88,10 @@
                     {% endif %}
                     <div class="flex mt-3 space-x-2">
                         <button onclick="openEditModal(`{{ task.id }}`, `{{ task.title }}`, `{{ task.description or '' }}`, `{{ task.quadrant }}`, `{{ task.due_date.strftime('%Y-%m-%d') if task.due_date else '' }}`)" class="text-xs btn bg-dark-100 hover:bg-dark-300 text-gray-300">Edit</button>
-                        <form action="{{ url_for('complete_task', task_id=task.id) }}" method="POST" class="inline">
+                        <form action="{{ url_for('tasks.complete_task', task_id=task.id) }}" method="POST" class="inline">
                             <button type="submit" class="text-xs btn bg-green-600 hover:bg-green-700 text-white">Complete</button>
                         </form>
-                        <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST" class="inline">
+                        <form action="{{ url_for('tasks.delete_task', task_id=task.id) }}" method="POST" class="inline">
                             <button type="submit" class="text-xs btn bg-red-600 hover:bg-red-700 text-white">Delete</button>
                         </form>
                     </div>
@@ -117,10 +117,10 @@
                     {% endif %}
                     <div class="flex mt-3 space-x-2">
                         <button onclick="openEditModal(`{{ task.id }}`, `{{ task.title }}`, `{{ task.description or '' }}`, `{{ task.quadrant }}`, `{{ task.due_date.strftime('%Y-%m-%d') if task.due_date else '' }}`)" class="text-xs btn bg-dark-100 hover:bg-dark-300 text-gray-300">Edit</button>
-                        <form action="{{ url_for('complete_task', task_id=task.id) }}" method="POST" class="inline">
+                        <form action="{{ url_for('tasks.complete_task', task_id=task.id) }}" method="POST" class="inline">
                             <button type="submit" class="text-xs btn bg-green-600 hover:bg-green-700 text-white">Complete</button>
                         </form>
-                        <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST" class="inline">
+                        <form action="{{ url_for('tasks.delete_task', task_id=task.id) }}" method="POST" class="inline">
                             <button type="submit" class="text-xs btn bg-red-600 hover:bg-red-700 text-white">Delete</button>
                         </form>
                     </div>
@@ -146,10 +146,10 @@
                     {% endif %}
                     <div class="flex mt-3 space-x-2">
                         <button onclick="openEditModal(`{{ task.id }}`, `{{ task.title }}`, `{{ task.description or '' }}`, `{{ task.quadrant }}`, `{{ task.due_date.strftime('%Y-%m-%d') if task.due_date else '' }}`)" class="text-xs btn bg-dark-100 hover:bg-dark-300 text-gray-300">Edit</button>
-                        <form action="{{ url_for('complete_task', task_id=task.id) }}" method="POST" class="inline">
+                        <form action="{{ url_for('tasks.complete_task', task_id=task.id) }}" method="POST" class="inline">
                             <button type="submit" class="text-xs btn bg-green-600 hover:bg-green-700 text-white">Complete</button>
                         </form>
-                        <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST" class="inline">
+                        <form action="{{ url_for('tasks.delete_task', task_id=task.id) }}" method="POST" class="inline">
                             <button type="submit" class="text-xs btn bg-red-600 hover:bg-red-700 text-white">Delete</button>
                         </form>
                     </div>
@@ -186,7 +186,7 @@
                         <p class="text-xs text-gray-500 mt-1">Requested via: {{ task.share_link.name }}</p>
                     </div>
                     <div>
-                        <form action="{{ url_for('accept_requested_task', task_id=task.id) }}" method="POST" class="flex flex-col space-y-2">
+                        <form action="{{ url_for('tasks.accept_requested_task', task_id=task.id) }}" method="POST" class="flex flex-col space-y-2">
                             <select name="quadrant" class="input text-sm py-1">
                                 <option value="1">Q1: Urgent & Important</option>
                                 <option value="2">Q2: Important, Not Urgent</option>
@@ -195,7 +195,7 @@
                             </select>
                             <button type="submit" class="bg-green-600 hover:bg-green-700 text-white text-sm py-1 px-3 rounded">Accept</button>
                         </form>
-                        <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST" class="mt-2">
+                        <form action="{{ url_for('tasks.delete_task', task_id=task.id) }}" method="POST" class="mt-2">
                             <button type="submit" class="bg-red-600 hover:bg-red-700 text-white text-sm py-1 px-3 rounded w-full">Decline</button>
                         </form>
                     </div>
@@ -332,6 +332,8 @@
             // Create a form to submit the quadrant change
             const form = document.createElement('form');
             form.method = 'POST';
+            // Use the correct blueprint route for task updates
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
             form.action = `/tasks/${taskId}/update`;
             form.style.display = 'none';
             
