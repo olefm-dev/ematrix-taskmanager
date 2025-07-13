@@ -1,5 +1,7 @@
 # Eisenhower Matrix Task Manager
 
+![Python Tests](https://github.com/USER_NAME/ematrix-tasks/actions/workflows/python-tests.yml/badge.svg)
+
 Human Note:
 This is just a wibe coded project, where AI has done most of the work, mainly Grok 4 and Claude 3.7 Sonnet. The IDE I'm using is Windsurf, and this is just meant as a little tool to manage my tasks. I will do a full code review at a later date, and maybe add some functionality depending on my needs and/or requests.
 
@@ -136,20 +138,39 @@ A beautiful dark mode task manager based on the Eisenhower Matrix, built with Fl
 
 ## Testing
 
-The application includes a comprehensive test suite covering authentication, task management, and admin functionality.
+### Running Tests Locally
 
-To run the tests:
+To run the test suite locally, make sure you have the required testing packages installed:
 
 ```bash
-# Run the tests
-./run_tests.sh
-# Or alternatively
+pip install pytest pytest-flask
+```
+
+Then run the tests using:
+
+```bash
 pytest -v
 ```
 
-The test suite includes:
-- **Unit tests**: Testing model functionality and validation
-- **Functional tests**: Testing routes, views, and form submissions
+Or use the provided script:
+
+```bash
+./run_tests.sh
+```
+
+### Continuous Integration
+
+This project uses GitHub Actions for continuous integration testing. The workflow automatically runs tests on multiple Python versions whenever changes are pushed to the repository.
+
+Features of the CI pipeline:
+- Runs tests on Python 3.10, 3.11, and 3.12
+- Performs code linting with flake8
+- Generates code coverage reports
+- Caches dependencies for faster builds
+
+You can manually trigger the workflow from the Actions tab in the GitHub repository.
+
+To view the current status of the tests, check the badge at the top of this README.
 
 ## License
 
