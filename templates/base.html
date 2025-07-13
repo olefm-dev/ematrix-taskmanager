@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eisenhower Matrix Task Manager</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        dark: {
+                            100: '#1E293B',
+                            200: '#172033',
+                            300: '#0F172A',
+                            400: '#0D1424',
+                            500: '#0B111F',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom utility classes */
+        .task-card {
+            background-color: theme('colors.dark.200');
+            border: 1px solid theme('colors.dark.100');
+            border-radius: 0.5rem;
+            padding: 1rem;
+            box-shadow: theme('boxShadow.md');
+            transition: all 0.2s;
+        }
+        .task-card:hover {
+            box-shadow: theme('boxShadow.lg');
+        }
+        .task-card-q1 {
+            border-left-width: 4px;
+            border-left-color: theme('colors.red.500');
+        }
+        .task-card-q2 {
+            border-left-width: 4px;
+            border-left-color: theme('colors.blue.500');
+        }
+        .task-card-q3 {
+            border-left-width: 4px;
+            border-left-color: theme('colors.yellow.500');
+        }
+        .task-card-q4 {
+            border-left-width: 4px;
+            border-left-color: theme('colors.green.500');
+        }
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            transition: colors 0.2s;
+        }
+        .btn-primary {
+            background-color: theme('colors.primary.600');
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: theme('colors.primary.700');
+        }
+        .btn-secondary {
+            background-color: theme('colors.gray.600');
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: theme('colors.gray.700');
+        }
+        .btn-danger {
+            background-color: theme('colors.red.600');
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: theme('colors.red.700');
+        }
+        .input {
+            background-color: #2D3748; /* gray-800 */
+            border: 1px solid #4A5568; /* gray-600 */
+            border-radius: 0.375rem;
+            padding: 0.5rem 0.75rem;
+            color: #F7FAFC; /* gray-100 */
+            font-weight: 500;
+        }
+        .input::placeholder {
+            color: #A0AEC0; /* gray-400 */
+        }
+        .input:focus {
+            outline: none;
+            border-color: #4299E1; /* blue-500 */
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5); /* blue-500 with opacity */
+        }
+    </style>
+</head>
+<body class="bg-dark-300 text-gray-100 min-h-screen flex flex-col">
+    <header class="bg-dark-200 shadow-md py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-primary-500">Eisenhower Matrix</h1>
+            <div class="flex items-center space-x-3">
+                <nav>
+                    <ul class="flex space-x-3">
+                        <li>
+                            <a href="{{ url_for('index') }}" class="bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg shadow-md transition-all duration-200 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                                </svg>
+                                Matrix
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('completed_tasks') }}" class="bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg shadow-md transition-all duration-200 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                </svg>
+                                Completed
+                            </a>
+                        </li>
+                        <li>
+                            <button id="settingsBtn" class="bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg shadow-md transition-all duration-200 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
+                                </svg>
+                                Settings
+                            </button>
+                        </li>
+                        <li>
+                            <button id="addTaskBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow-md transition-all duration-200 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                </svg>
+                                Add Task
+                            </button>
+                        </li>
+                        {% if current_user.is_authenticated %}
+                        <li>
+                            <a href="{{ url_for('logout') }}" class="bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg shadow-md transition-all duration-200 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                </svg>
+                                Logout
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-6 flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-dark-200 p-6 rounded-lg shadow-lg max-w-md w-full">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Settings</h3>
+                <button type="button" onclick="closeSettingsModal()" class="text-gray-400 hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="mb-6">
+                <h4 class="text-lg font-medium mb-3">Theme</h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <button class="theme-option bg-gray-900 text-white p-4 rounded-lg border-2 border-transparent hover:border-blue-500 transition-all duration-200" data-theme="dark">
+                        <div class="flex justify-center items-center mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                            </svg>
+                        </div>
+                        <p class="text-center">Dark</p>
+                    </button>
+                    <button class="theme-option bg-gray-100 text-gray-900 p-4 rounded-lg border-2 border-transparent hover:border-blue-500 transition-all duration-200" data-theme="light">
+                        <div class="flex justify-center items-center mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                        </div>
+                        <p class="text-center">Light</p>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <h4 class="text-lg font-medium mb-3">Share Links</h4>
+                <p class="text-sm text-gray-400 mb-4">Create links to share with others so they can submit tasks to your matrix.</p>
+                
+                <div class="flex mb-4">
+                    <input type="text" id="shareLinkName" class="input flex-grow mr-2" placeholder="Link name (e.g. Team Alpha)">
+                    <button id="createShareLinkBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow-md transition-all duration-200">
+                        Create
+                    </button>
+                </div>
+                
+                <div id="shareLinksContainer" class="space-y-3 max-h-64 overflow-y-auto">
+                    <div class="text-center text-gray-400 py-4" id="noShareLinksMessage">
+                        No share links created yet
+                    </div>
+                    <!-- Share links will be added here dynamically -->
+                </div>
+            </div>
+            <div class="flex justify-end">
+                <button onclick="closeSettingsModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow-md transition-all duration-200">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark-200 py-4 mt-auto">
+        <div class="container mx-auto px-4 text-center text-gray-500">
+            <p>Eisenhower Matrix Task Manager &copy; {{ now.year }}</p>
+        </div>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+    
+    <script>
+        // Settings Modal Functions
+        function openSettingsModal() {
+            document.getElementById('settingsModal').classList.remove('hidden');
+        }
+        
+        function closeSettingsModal() {
+            document.getElementById('settingsModal').classList.add('hidden');
+        }
+        
+        // Add event listener to the Settings button
+        document.getElementById('settingsBtn').addEventListener('click', openSettingsModal);
+        
+        // Close Settings modal when clicking outside
+        document.getElementById('settingsModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSettingsModal();
+            }
+        });
+        
+        // Theme switching functionality
+        document.querySelectorAll('.theme-option').forEach(button => {
+            button.addEventListener('click', function() {
+                const theme = this.dataset.theme;
+                setTheme(theme);
+                
+                // Save theme preference to localStorage
+                localStorage.setItem('theme', theme);
+                
+                // Update active state on buttons
+                document.querySelectorAll('.theme-option').forEach(btn => {
+                    btn.classList.remove('border-blue-500');
+                    btn.classList.add('border-transparent');
+                });
+                this.classList.remove('border-transparent');
+                this.classList.add('border-blue-500');
+            });
+        });
+        
+        function setTheme(theme) {
+            const body = document.body;
+            if (theme === 'light') {
+                body.classList.remove('bg-dark-300', 'text-gray-100');
+                body.classList.add('bg-gray-100', 'text-gray-900');
+                document.querySelectorAll('.bg-dark-200').forEach(el => {
+                    el.classList.remove('bg-dark-200');
+                    el.classList.add('bg-white');
+                });
+            } else {
+                body.classList.remove('bg-gray-100', 'text-gray-900');
+                body.classList.add('bg-dark-300', 'text-gray-100');
+                document.querySelectorAll('.bg-white').forEach(el => {
+                    el.classList.remove('bg-white');
+                    el.classList.add('bg-dark-200');
+                });
+            }
+        }
+        
+        // Load saved theme on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                setTheme(savedTheme);
+                // Update active state on theme button
+                document.querySelector(`.theme-option[data-theme="${savedTheme}"]`).classList.add('border-blue-500');
+                document.querySelector(`.theme-option[data-theme="${savedTheme}"]`).classList.remove('border-transparent');
+            } else {
+                // Default theme is dark
+                document.querySelector('.theme-option[data-theme="dark"]').classList.add('border-blue-500');
+                document.querySelector('.theme-option[data-theme="dark"]').classList.remove('border-transparent');
+            }
+        });
+        
+        // Add Task button functionality
+        document.getElementById('addTaskBtn').addEventListener('click', function() {
+            // If we're on the completed page, redirect to index and then open modal
+            if (window.location.pathname.includes('completed')) {
+                localStorage.setItem('openAddTaskModal', 'true');
+                window.location.href = '{{ url_for("index") }}';
+            } else if (typeof openAddTaskModal === 'function') {
+                // If we're already on the index page, just open the modal
+                openAddTaskModal();
+            }
+        });
+        
+        // Check if we need to open the Add Task modal after redirect
+        document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('openAddTaskModal') === 'true' && typeof openAddTaskModal === 'function') {
+                openAddTaskModal();
+                localStorage.removeItem('openAddTaskModal');
+            }
+            
+            // Load share links
+            loadShareLinks();
+        });
+        
+        // Share Links Management
+        function loadShareLinks() {
+            fetch('/share-links')
+                .then(response => response.json())
+                .then(links => {
+                    const container = document.getElementById('shareLinksContainer');
+                    const noLinksMessage = document.getElementById('noShareLinksMessage');
+                    
+                    if (links.length === 0) {
+                        noLinksMessage.classList.remove('hidden');
+                        return;
+                    }
+                    
+                    noLinksMessage.classList.add('hidden');
+                    container.innerHTML = '';
+                    
+                    links.forEach(link => {
+                        const linkElement = document.createElement('div');
+                        linkElement.className = 'bg-dark-100 rounded-lg p-3 flex flex-col';
+                        linkElement.dataset.linkId = link.id;
+                        
+                        const header = document.createElement('div');
+                        header.className = 'flex justify-between items-center mb-2';
+                        
+                        const title = document.createElement('h5');
+                        title.className = 'font-medium';
+                        title.textContent = link.name;
+                        
+                        const controls = document.createElement('div');
+                        controls.className = 'flex space-x-2';
+                        
+                        const toggleBtn = document.createElement('button');
+                        toggleBtn.className = 'text-sm px-2 py-1 rounded ' + 
+                            (link.active ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-600 hover:bg-gray-700');
+                        toggleBtn.textContent = link.active ? 'Active' : 'Inactive';
+                        toggleBtn.onclick = () => toggleShareLink(link.id);
+                        
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.className = 'text-sm px-2 py-1 rounded bg-red-600 hover:bg-red-700';
+                        deleteBtn.textContent = 'Delete';
+                        deleteBtn.onclick = () => deleteShareLink(link.id);
+                        
+                        controls.appendChild(toggleBtn);
+                        controls.appendChild(deleteBtn);
+                        
+                        header.appendChild(title);
+                        header.appendChild(controls);
+                        
+                        const info = document.createElement('div');
+                        info.className = 'text-sm text-gray-400';
+                        info.textContent = `Created: ${link.created_at} · Tasks: ${link.task_count}`;
+                        
+                        const shareUrl = document.createElement('div');
+                        shareUrl.className = 'mt-2 flex';
+                        
+                        const urlInput = document.createElement('input');
+                        urlInput.className = 'input flex-grow text-sm py-1';
+                        urlInput.value = `${window.location.origin}/share/${link.id}`;
+                        urlInput.readOnly = true;
+                        urlInput.onclick = function() { this.select(); };
+                        
+                        const copyBtn = document.createElement('button');
+                        copyBtn.className = 'ml-2 bg-blue-600 hover:bg-blue-700 text-white text-sm px-3 py-1 rounded';
+                        copyBtn.textContent = 'Copy';
+                        copyBtn.onclick = () => {
+                            urlInput.select();
+                            document.execCommand('copy');
+                            copyBtn.textContent = 'Copied!';
+                            setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+                        };
+                        
+                        shareUrl.appendChild(urlInput);
+                        shareUrl.appendChild(copyBtn);
+                        
+                        linkElement.appendChild(header);
+                        linkElement.appendChild(info);
+                        linkElement.appendChild(shareUrl);
+                        
+                        container.appendChild(linkElement);
+                    });
+                })
+                .catch(error => console.error('Error loading share links:', error));
+        }
+        
+        function createShareLink() {
+            const nameInput = document.getElementById('shareLinkName');
+            const name = nameInput.value.trim();
+            
+            if (!name) {
+                alert('Please enter a name for the share link');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('name', name);
+            
+            fetch('/share-links', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+                
+                nameInput.value = '';
+                loadShareLinks();
+            })
+            .catch(error => console.error('Error creating share link:', error));
+        }
+        
+        function toggleShareLink(linkId) {
+            fetch(`/share-links/${linkId}/toggle`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(() => loadShareLinks())
+            .catch(error => console.error('Error toggling share link:', error));
+        }
+        
+        function deleteShareLink(linkId) {
+            if (!confirm('Are you sure you want to delete this share link? All associated tasks will remain.')) {
+                return;
+            }
+            
+            fetch(`/share-links/${linkId}/delete`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(() => loadShareLinks())
+            .catch(error => console.error('Error deleting share link:', error));
+        }
+        
+        // Add event listener to the Create Share Link button
+        document.getElementById('createShareLinkBtn').addEventListener('click', createShareLink);
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-lg mx-auto mt-8 mb-12">
+    <div class="bg-dark-200 rounded-lg p-6 shadow-lg text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-green-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        
+        <h1 class="text-2xl font-bold mb-2">Task Submitted!</h1>
+        <p class="text-gray-400 mb-6">Your task has been sent to <span class="font-medium text-primary-400">{{ link.name }}</span>'s Eisenhower Matrix.</p>
+        
+        <p class="text-gray-400 mb-8">They will review your task and decide where to place it in their matrix.</p>
+        
+        <div class="flex justify-center space-x-4">
+            <a href="{{ url_for('share_link_page', link_id=link.id) }}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg shadow-md transition-all duration-200">
+                Submit Another Task
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

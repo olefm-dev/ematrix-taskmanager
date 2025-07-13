@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="mb-8">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold">Completed Tasks</h2>
+        <a href="{{ url_for('index') }}" class="btn btn-primary">Back to Matrix</a>
+    </div>
+    
+    <div class="bg-dark-200 rounded-lg p-6 shadow-lg">
+        {% if tasks %}
+            <div class="space-y-4">
+                {% for task in tasks %}
+                <div class="task-card border-l-4 border-l-gray-500 flex justify-between">
+                    <div>
+                        <h4 class="font-bold line-through text-gray-400">{{ task.title }}</h4>
+                        <p class="text-sm text-gray-500">
+                            Quadrant: {{ task.quadrant }} • 
+                            Completed: {{ task.updated_at.strftime('%Y-%m-%d') }}
+                        </p>
+                        {% if task.description %}
+                        <p class="text-sm mt-2 text-gray-400">{{ task.description }}</p>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST" class="inline">
+                            <button type="submit" class="text-xs btn bg-red-600 hover:bg-red-700 text-white">Delete</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-gray-400 italic">No completed tasks yet</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
