@@ -9,6 +9,9 @@ AI ReadMe:
 
 🚀 A Fun Vibe Coding AI Project
 
+<img width="1439" height="923" alt="image" src="https://github.com/user-attachments/assets/edfa3d0e-c564-4b62-87a0-01953e020d75" />
+
+
 This is a playful project built with the help of Grok AI, blending productivity with a chill, exploratory coding vibe. It's a sleek task manager inspired by the Eisenhower Matrix—perfect for organizing your chaos while having fun with Flask and modern web tech!
 
 A beautiful dark mode task manager based on the Eisenhower Matrix, built with Flask and SQLite.
