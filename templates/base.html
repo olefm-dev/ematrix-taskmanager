@@ -117,12 +117,13 @@
             <div class="flex items-center space-x-3">
                 <nav>
                     <ul class="flex space-x-3">
+                        {% if current_user.is_authenticated %}
                         <li>
                             <a href="{{ url_for('index') }}" class="bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg shadow-md transition-all duration-200 flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                                 </svg>
-                                Matrix
+                                Home
                             </a>
                         </li>
                         <li>
@@ -133,6 +134,17 @@
                                 Completed
                             </a>
                         </li>
+                        {% else %}
+                        <li>
+                            <a href="{{ url_for('login') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow-md transition-all duration-200 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                </svg>
+                                Login
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if current_user.is_authenticated %}
                         <li>
                             <button id="settingsBtn" class="bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg shadow-md transition-all duration-200 flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -143,13 +155,12 @@
                         </li>
                         <li>
                             <button id="addTaskBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow-md transition-all duration-200 flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 01-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                                 </svg>
                                 Add Task
                             </button>
                         </li>
-                        {% if current_user.is_authenticated %}
                         <li>
                             <a href="{{ url_for('logout') }}" class="bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg shadow-md transition-all duration-200 flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -170,6 +181,7 @@
     </main>
 
     <!-- Settings Modal -->
+    {% if current_user.is_authenticated %}
     <div id="settingsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-dark-200 p-6 rounded-lg shadow-lg max-w-md w-full">
             <div class="flex justify-between items-center mb-4">
@@ -227,6 +239,7 @@
             </div>
         </div>
     </div>
+    {% endif %}
 
     <footer class="bg-dark-200 py-4 mt-auto">
         <div class="container mx-auto px-4 text-center text-gray-500">
@@ -236,239 +249,7 @@
 
     {% block scripts %}{% endblock %}
     
-    <script>
-        // Settings Modal Functions
-        function openSettingsModal() {
-            document.getElementById('settingsModal').classList.remove('hidden');
-        }
-        
-        function closeSettingsModal() {
-            document.getElementById('settingsModal').classList.add('hidden');
-        }
-        
-        // Add event listener to the Settings button
-        document.getElementById('settingsBtn').addEventListener('click', openSettingsModal);
-        
-        // Close Settings modal when clicking outside
-        document.getElementById('settingsModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeSettingsModal();
-            }
-        });
-        
-        // Theme switching functionality
-        document.querySelectorAll('.theme-option').forEach(button => {
-            button.addEventListener('click', function() {
-                const theme = this.dataset.theme;
-                setTheme(theme);
-                
-                // Save theme preference to localStorage
-                localStorage.setItem('theme', theme);
-                
-                // Update active state on buttons
-                document.querySelectorAll('.theme-option').forEach(btn => {
-                    btn.classList.remove('border-blue-500');
-                    btn.classList.add('border-transparent');
-                });
-                this.classList.remove('border-transparent');
-                this.classList.add('border-blue-500');
-            });
-        });
-        
-        function setTheme(theme) {
-            const body = document.body;
-            if (theme === 'light') {
-                body.classList.remove('bg-dark-300', 'text-gray-100');
-                body.classList.add('bg-gray-100', 'text-gray-900');
-                document.querySelectorAll('.bg-dark-200').forEach(el => {
-                    el.classList.remove('bg-dark-200');
-                    el.classList.add('bg-white');
-                });
-            } else {
-                body.classList.remove('bg-gray-100', 'text-gray-900');
-                body.classList.add('bg-dark-300', 'text-gray-100');
-                document.querySelectorAll('.bg-white').forEach(el => {
-                    el.classList.remove('bg-white');
-                    el.classList.add('bg-dark-200');
-                });
-            }
-        }
-        
-        // Load saved theme on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme) {
-                setTheme(savedTheme);
-                // Update active state on theme button
-                document.querySelector(`.theme-option[data-theme="${savedTheme}"]`).classList.add('border-blue-500');
-                document.querySelector(`.theme-option[data-theme="${savedTheme}"]`).classList.remove('border-transparent');
-            } else {
-                // Default theme is dark
-                document.querySelector('.theme-option[data-theme="dark"]').classList.add('border-blue-500');
-                document.querySelector('.theme-option[data-theme="dark"]').classList.remove('border-transparent');
-            }
-        });
-        
-        // Add Task button functionality
-        document.getElementById('addTaskBtn').addEventListener('click', function() {
-            // If we're on the completed page, redirect to index and then open modal
-            if (window.location.pathname.includes('completed')) {
-                localStorage.setItem('openAddTaskModal', 'true');
-                window.location.href = '{{ url_for("index") }}';
-            } else if (typeof openAddTaskModal === 'function') {
-                // If we're already on the index page, just open the modal
-                openAddTaskModal();
-            }
-        });
-        
-        // Check if we need to open the Add Task modal after redirect
-        document.addEventListener('DOMContentLoaded', function() {
-            if (localStorage.getItem('openAddTaskModal') === 'true' && typeof openAddTaskModal === 'function') {
-                openAddTaskModal();
-                localStorage.removeItem('openAddTaskModal');
-            }
-            
-            // Load share links
-            loadShareLinks();
-        });
-        
-        // Share Links Management
-        function loadShareLinks() {
-            fetch('/share-links')
-                .then(response => response.json())
-                .then(links => {
-                    const container = document.getElementById('shareLinksContainer');
-                    const noLinksMessage = document.getElementById('noShareLinksMessage');
-                    
-                    if (links.length === 0) {
-                        noLinksMessage.classList.remove('hidden');
-                        return;
-                    }
-                    
-                    noLinksMessage.classList.add('hidden');
-                    container.innerHTML = '';
-                    
-                    links.forEach(link => {
-                        const linkElement = document.createElement('div');
-                        linkElement.className = 'bg-dark-100 rounded-lg p-3 flex flex-col';
-                        linkElement.dataset.linkId = link.id;
-                        
-                        const header = document.createElement('div');
-                        header.className = 'flex justify-between items-center mb-2';
-                        
-                        const title = document.createElement('h5');
-                        title.className = 'font-medium';
-                        title.textContent = link.name;
-                        
-                        const controls = document.createElement('div');
-                        controls.className = 'flex space-x-2';
-                        
-                        const toggleBtn = document.createElement('button');
-                        toggleBtn.className = 'text-sm px-2 py-1 rounded ' + 
-                            (link.active ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-600 hover:bg-gray-700');
-                        toggleBtn.textContent = link.active ? 'Active' : 'Inactive';
-                        toggleBtn.onclick = () => toggleShareLink(link.id);
-                        
-                        const deleteBtn = document.createElement('button');
-                        deleteBtn.className = 'text-sm px-2 py-1 rounded bg-red-600 hover:bg-red-700';
-                        deleteBtn.textContent = 'Delete';
-                        deleteBtn.onclick = () => deleteShareLink(link.id);
-                        
-                        controls.appendChild(toggleBtn);
-                        controls.appendChild(deleteBtn);
-                        
-                        header.appendChild(title);
-                        header.appendChild(controls);
-                        
-                        const info = document.createElement('div');
-                        info.className = 'text-sm text-gray-400';
-                        info.textContent = `Created: ${link.created_at} · Tasks: ${link.task_count}`;
-                        
-                        const shareUrl = document.createElement('div');
-                        shareUrl.className = 'mt-2 flex';
-                        
-                        const urlInput = document.createElement('input');
-                        urlInput.className = 'input flex-grow text-sm py-1';
-                        urlInput.value = `${window.location.origin}/share/${link.id}`;
-                        urlInput.readOnly = true;
-                        urlInput.onclick = function() { this.select(); };
-                        
-                        const copyBtn = document.createElement('button');
-                        copyBtn.className = 'ml-2 bg-blue-600 hover:bg-blue-700 text-white text-sm px-3 py-1 rounded';
-                        copyBtn.textContent = 'Copy';
-                        copyBtn.onclick = () => {
-                            urlInput.select();
-                            document.execCommand('copy');
-                            copyBtn.textContent = 'Copied!';
-                            setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
-                        };
-                        
-                        shareUrl.appendChild(urlInput);
-                        shareUrl.appendChild(copyBtn);
-                        
-                        linkElement.appendChild(header);
-                        linkElement.appendChild(info);
-                        linkElement.appendChild(shareUrl);
-                        
-                        container.appendChild(linkElement);
-                    });
-                })
-                .catch(error => console.error('Error loading share links:', error));
-        }
-        
-        function createShareLink() {
-            const nameInput = document.getElementById('shareLinkName');
-            const name = nameInput.value.trim();
-            
-            if (!name) {
-                alert('Please enter a name for the share link');
-                return;
-            }
-            
-            const formData = new FormData();
-            formData.append('name', name);
-            
-            fetch('/share-links', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert(data.error);
-                    return;
-                }
-                
-                nameInput.value = '';
-                loadShareLinks();
-            })
-            .catch(error => console.error('Error creating share link:', error));
-        }
-        
-        function toggleShareLink(linkId) {
-            fetch(`/share-links/${linkId}/toggle`, {
-                method: 'POST'
-            })
-            .then(response => response.json())
-            .then(() => loadShareLinks())
-            .catch(error => console.error('Error toggling share link:', error));
-        }
-        
-        function deleteShareLink(linkId) {
-            if (!confirm('Are you sure you want to delete this share link? All associated tasks will remain.')) {
-                return;
-            }
-            
-            fetch(`/share-links/${linkId}/delete`, {
-                method: 'POST'
-            })
-            .then(response => response.json())
-            .then(() => loadShareLinks())
-            .catch(error => console.error('Error deleting share link:', error));
-        }
-        
-        // Add event listener to the Create Share Link button
-        document.getElementById('createShareLinkBtn').addEventListener('click', createShareLink);
-    </script>
+    <!-- External JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
