@@ -3,7 +3,7 @@
 [![Python 3.12](https://github.com/olefm-dev/ematrix-taskmanager/actions/workflows/python-tests.yml/badge.svg)](https://github.com/olefm-dev/ematrix-taskmanager/actions/workflows/python-tests.yml)
 
 Human Note:
-This is just a wibe coded project, where AI has done most of the work, mainly Grok 4 and Claude 3.7 Sonnet. The IDE I'm using is Windsurf, and this is just meant as a little tool to manage my tasks. I will do a full code review at a later date, and maybe add some functionality depending on my needs and/or requests.
+This is just a vibe coded project, where AI has done most of the work, mainly Grok 4 and Claude 3.7 Sonnet. The IDE I'm using is Windsurf, and this is just meant as a little tool to manage my tasks. I will do a full code review at a later date, and maybe add some functionality depending on my needs and/or requests.
 
 Be warned, as this is mostly AI it does not follow best practices, the code is "dirty" and not optimized. But it works, for now.
 
